@@ -9,7 +9,7 @@ import torchvision.transforms as transforms
 
 
 dataset = datasets.ImageFolder(
-    'dataset',
+    'dataset_blocked_free',
     transforms.Compose([
         transforms.ColorJitter(0.1, 0.1, 0.1, 0.1),
         transforms.Resize((224, 224)),
@@ -18,25 +18,25 @@ dataset = datasets.ImageFolder(
     ])
 )
 
-train_dataset, test_dataset = torch.utils.data.random_split(dataset, [len(dataset) - 20, 20])
+train_dataset, test_dataset = torch.utils.data.random_split(dataset, [len(dataset) - 75, 75])
 
 train_loader = torch.utils.data.DataLoader(
     train_dataset,
-    batch_size=4,
+    batch_size=16,
     shuffle=True,
-    num_workers=4
+    num_workers=16
 )
 
 test_loader = torch.utils.data.DataLoader(
     test_dataset,
-    batch_size=4,
+    batch_size=16,
     shuffle=True,
-    num_workers=4
+    num_workers=16
 )
 
 model = models.alexnet(pretrained=True)
 
-model.classifier[6] = torch.nn.Linear(model.classifier[6].in_features, 3)
+model.classifier[6] = torch.nn.Linear(model.classifier[6].in_features, 2)
 
 print("Loading model")
 device = torch.device('cuda')
